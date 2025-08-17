@@ -1,0 +1,24 @@
+# Node modules & build
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Env files
+.env
+.env.*
+
+# OS / Editor files
+.DS_Store
+.vscode
+.idea
+*.swp
+
+# Tests & docs
+coverage
+__tests__/
+docs/
+
+# Git files
+.git
+.gitignore
