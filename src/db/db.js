@@ -9,7 +9,7 @@ const redisUrl ='redis://localhost:6379';
 
 const client = createClient({
   // url: `redis://${process.env.REDIS_HOST || "localhost"}:${process.env.REDIS_PORT || 6379}`,
-    url: `redis://default:${process.env.REDIS_TOKEN}@exotic-raccoon-51584.upstash.io:6379`
+    url: `rediss://default:${process.env.REDIS_TOKEN}@exotic-raccoon-51584.upstash.io:6379`
 
 });
 
