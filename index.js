@@ -43,7 +43,7 @@ const conn = mongoose.createConnection(process.env.MONGO_KEY,{ useNewUrlParser: 
 // console.log("flueshed")
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://ayurvedic-frontend.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
     credentials: true, // if you're using cookies or tokens
