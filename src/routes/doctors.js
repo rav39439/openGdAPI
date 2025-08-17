@@ -231,8 +231,25 @@ cron.schedule("* * * * *", async () => {
   }
 });
 
-cron.schedule("0 0 * * *", async () => {
-  console.log("Running daily flush job");
+// cron.schedule("0 0 * * *", async () => {
+//   console.log("Running daily flush job");
+//   try {
+//     const doctors = await Doctor.find({});
+//     for (const doctor of doctors) {
+//       await generateTodaySlots(doctor._id);
+//     }
+//     console.log("Slots generated for all doctors");
+//   } catch (err) {
+//     console.error("Error generating slots:", err);
+//   }
+//   await flush();
+// });
+
+
+
+cron.schedule("0 */4 * * *", async () => {
+  console.log("Running flush job every 4 hours");
+
   try {
     const doctors = await Doctor.find({});
     for (const doctor of doctors) {
@@ -242,8 +259,10 @@ cron.schedule("0 0 * * *", async () => {
   } catch (err) {
     console.error("Error generating slots:", err);
   }
+
   await flush();
 });
+
 
 const confirmBooking = async (req, res) => {
   try {

@@ -1,7 +1,6 @@
 // redisClient.js
 const { createClient } = require('redis');
 
-const redisUrl ='redis://localhost:6379';
 
 // const client = createClient({
 //   url: redisUrl

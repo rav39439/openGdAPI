@@ -4,9 +4,9 @@ const server = require('http').createServer(app);
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 require('dotenv').config()
-const userRoute = require("./src/routestest/users");
+const userRoute = require("./src/controllers/users");
 
-const doctorRoute = require("./src/routestest/doctorsroute");
+const doctorRoute = require("./src/controllers/doctorsroute");
 
 
 const cors=require('cors');
