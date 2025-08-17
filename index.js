@@ -4,6 +4,22 @@ const server = require('http').createServer(app);
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 require('dotenv').config()
+const rateLimit = require("express-rate-limit");
+
+// Apply rate limiter globally
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+  legacyHeaders: false, // Disable `X-RateLimit-*` headers
+  message: {
+    status: 429,
+    error: "Too many requests, please try again later."
+  }
+});
+
+// Apply to all routes
+app.use(apiLimiter);
 const userRoute = require("./src/controllers/users");
 
 const doctorRoute = require("./src/controllers/doctorsroute");

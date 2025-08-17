@@ -110,26 +110,41 @@ const getDoctors = async (req, res) => {
   if (specialization) filter.specialization = new RegExp(specialization, "i");
   if (mode) filter.modes = { $in: [mode.toLowerCase()] };
 
-  let doctors = await Doctor.find(filter).lean();
-  if (sort === "soonest") {
-    doctors = doctors
-      .map((d) => ({
+let doctors = await Doctor.find(filter).lean();
+
+if (sort === "soonest") {
+  // Map with async functions for soonestAvailability and slots
+  doctors = await Promise.all(
+    doctors.map(async (d) => {
+      const soonestAvailability = await soonestAvailabilityForDoctor(d._id.toString());
+      const slots = await getSlotsByDoctor(d._id.toString());
+
+      return {
         ...d,
-        soonestAvailability: soonestAvailabilityForDoctor(d._id.toString()),
-      }))
-      .sort((a, b) => {
-        if (!a.soonestAvailability && !b.soonestAvailability) return 0;
-        if (!a.soonestAvailability) return 1;
-        if (!b.soonestAvailability) return -1;
-        return a.soonestAvailability - b.soonestAvailability;
-      })
-      .map((d) => ({
-        ...d,
-        soonestAvailability: d.soonestAvailability
-          ? d.soonestAvailability.toISOString()
-          : null,
-      }));
-  }
+        soonestAvailability: soonestAvailability ? soonestAvailability.toISOString() : null,
+        slots: slots || []
+      };
+    })
+  );
+
+  // Sort after all async values are resolved
+
+}
+
+doctors = await Promise.all(
+  doctors.map(async (d) => {
+    const slots = await getSlotsByDoctor(d._id.toString());
+    return { ...d, slots };
+  })
+);
+
+// 2️⃣ Sort by soonestAvailability
+// doctors.sort((a, b) => {
+//   if (!a.soonestAvailability && !b.soonestAvailability) return 0;
+//   if (!a.soonestAvailability) return 1;
+//   if (!b.soonestAvailability) return -1;
+//   return new Date(a.soonestAvailability) - new Date(b.soonestAvailability);
+// });
   res.json({ count: doctors.length, items: doctors });
 };
 
@@ -247,21 +262,21 @@ cron.schedule("* * * * *", async () => {
 
 
 
-cron.schedule("0 */4 * * *", async () => {
-  console.log("Running flush job every 4 hours");
+// cron.schedule("0 */4 * * *", async () => {
+//   console.log("Running flush job every 4 hours");
 
-  try {
-    const doctors = await Doctor.find({});
-    for (const doctor of doctors) {
-      await generateTodaySlots(doctor._id);
-    }
-    console.log("Slots generated for all doctors");
-  } catch (err) {
-    console.error("Error generating slots:", err);
-  }
+//   try {
+//     const doctors = await Doctor.find({});
+//     for (const doctor of doctors) {
+//       await generateTodaySlots(doctor._id);
+//     }
+//     console.log("Slots generated for all doctors");
+//   } catch (err) {
+//     console.error("Error generating slots:", err);
+//   }
 
-  await flush();
-});
+//   await flush();
+// });
 
 
 const confirmBooking = async (req, res) => {
