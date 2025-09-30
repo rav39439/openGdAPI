@@ -8,6 +8,7 @@ const auth=(req,res,next)=>{
 
     }
     catch(err){
+        res.status(400).send({message:"token expired"})
         console.log(err)
     }
 }
