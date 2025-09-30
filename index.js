@@ -4,7 +4,6 @@ const server = require('http').createServer(app);
 require('dotenv').config()
 const rateLimit = require("express-rate-limit");
 const fs=require('fs')
-const {savedata,filterData}=require('../backend/src/helper/helpermethods')
 // Apply rate limiter globally
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -23,7 +22,7 @@ const userRoute = require("./src/controllers/users");
 
 const dataRoute = require("./src/controllers/dataRoute");
 
-const {conn}=require('../backend/src/db/mongooose')
+const {conn}=require('./src/db/mongooose')
 const cors=require('cors');
 
 // app.use(cors(), function(req, res, next) {
