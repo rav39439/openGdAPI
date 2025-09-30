@@ -48,7 +48,7 @@ const cors=require('cors');
 // console.log("flueshed")
 app.use(
   cors({
-    origin: "https://open-g-dfrontend-d65gxx7qo-ravish-kumars-projects-95b42966.vercel.app",
+    origin: "https://open-g-dfrontend.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
     credentials: true, // if you're using cookies or tokens
