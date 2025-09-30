@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const newmodelusers = require("../model/usermodel");
 
-
-
-
-
-
 const signup = async (req, res) => {
- 
+
+  console.log("addasfa")
+    console.log(req)
+
+   const {username, email, password } = req.body;
+
     if (!username || !email || !password) {
       return res
         .status(400)
@@ -27,16 +27,14 @@ const signup = async (req, res) => {
           .status(409)
           .json({ success: false, message: "user already exists" });
       }
-      // Create new user
-
-    // Create user
+     
     let newUser=null
     try{
   newUser = await newmodelusers.create({
       username,
       email,
       password: hashedPassword,
-      phoneNumber,
+      // phoneNumber,
       joinedOn: new Date(),
     });
 
@@ -58,9 +56,9 @@ const signup = async (req, res) => {
         .json({
           success: true,
           message: "Signup successful",
-          data: { user: newUser, access_token },
+          data: { user: newUser, token },
           result: newUser,
-          token: token,
+          access_token: token,
         });
     } catch (error) {
       console.error("Signup Error:", error);
